@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import Button from "./Button";
+import Input from "./Input";
 
 function App() {
 
-  const [total, setTotal] = useState(0);
-
-  function incrementar(){
-    setTotal((total) => total + 1)
+  function handleClick(){
+    console.log('Clickou')
   }
 
   return (
       <div>
-        <p>Total: {total}</p>
-        <Button className="Mariano" tamanho='1.25rem' onClick={incrementar}>Incrementar</Button>
+        <Input id="mariano" label="Mariano"/>
       </div>
   )
 }
