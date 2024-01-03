@@ -1,62 +1,63 @@
-import React, { useEffect, useState } from "react";
-import Button from "./Button";
-import Input from "./Input";
+import React, { useEffect, useRef, useState } from "react";
 
-/*
-
-Interface da API: https://data.origamid.dev/vendas/
-<!-- Essa API possui dados de hoje até 90 dias atrás -->
-
-1 - Utilize a API: `https://data.origamid.dev/vendas/?inicio=${inicio}&final=${final}`
-2 - Inicio/Final é uma string do tipo data YYYY-MM-DD (padrão de saída do input tipo date)
-3 - Crie ou reutilize o componente Input.tsx (Label com Input) das aulas anteriores
-4 - Crie 3 estados reativos em App.tsx: data, inicio, final
-5 - Utilize o componente Input.tsx para modificar o estado de inicio/final
-6 - Crie um efeito que ocorrerá toda vez que inicio/final mudar. Se existir inicio/final, faça o fetch da API e popule o estado de data com o resultado.
-7 - Caso data seja diferente de null, mostre na tela o nome e o status de cada venda do período selecionado
-
-*/
-
-type SaleInfo = {
-  id: string;
-  nome: string;
-  preco: number;
-  status: string;
-  pagamento: string;
-  parcelas: null | number;
-  data: string;
-}
-
+import videoSrc from './video.mp4'
 
 function App() {
+  const [isPaused, setIsPaused] = useState<boolean>(true);
+  const video = useRef<HTMLVideoElement>(null);
 
-  const [data, setData] = useState<Array<SaleInfo> | null>(null);
-  const [inicio, setInicio] = useState<string>('');
-  const [final, setFinal] = useState<string>('');
-
-  async function fetchData(initialDate: string, finalDate: string):Promise<Array<SaleInfo>>{
-    const response = await fetch(`https://data.origamid.dev/vendas/?inicio=${initialDate}&final=${finalDate}`);
-    return response.json();
- 
+  function decidePlayOrPauseButton(){
+    if(isPaused){
+      return <button onClick={()=> video.current?.play()}>Play</button>
+    }
+    return <button onClick={()=> video.current?.pause()}>Pause</button>
   }
 
-  useEffect(()=>{
-    if(inicio && final){
-      fetchData(inicio, final).then((response)=>setData(response));
+  function moreTwoSeconds(){
+    if(video.current){
+      video.current.currentTime+=2;
     }
-  }, [inicio, final])
+  }
+
+  function changeVideoSpeed(speed: number){
+    if(video.current){
+      video.current.playbackRate = speed;
+    }
+  }
+
+  function playInPictureVideo(){
+    if(video.current){
+      video.current.requestPictureInPicture();
+    }
+  }
+
+  function muteOrDesmuteVideo(){
+    if(video.current){
+      video.current.muted = !video.current.muted;
+    }
+  }
 
   return (
       <div>
-        <Input label="Data incial" id="inicio" type="date" value={inicio} onChange={(e)=>setInicio(e.target.value)}/>
-        <Input label="Data final" id="fim" type="date" value={final} onChange={(e)=>setFinal(e.target.value)}/>
-        <p>Início: {inicio}</p>
-        <p>Final: {final}</p>
-        <ul>
-          {data && data.map(({id, nome, status}) =>(
-              <li key={id}> {nome}: {status}</li>
-              ))}
-        </ul>
+        <div className="flex">
+          {decidePlayOrPauseButton()}
+          {video.current &&(
+            <>
+              <button onClick={moreTwoSeconds}>+ 2s</button>
+              <button onClick={()=>changeVideoSpeed(1)}>1x</button>
+              <button onClick={()=>changeVideoSpeed(2)}>2x</button>
+              <button onClick={playInPictureVideo}>PiP</button>
+              <button onClick={muteOrDesmuteVideo}>Mute</button>
+            </>
+          )}
+      
+        </div>
+       <video 
+       src={videoSrc} 
+       ref={video}
+       onPlay={()=> setIsPaused(false)}
+       onPause={()=> setIsPaused(true)}
+       ></video>
       </div>
   )
 }
