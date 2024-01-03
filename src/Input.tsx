@@ -8,12 +8,13 @@ import React from 'react'
 6 - Adicione 1rem de marginBottom na <div>
 */
 
-type InputProps = React.ComponentProps<'input'> & {
-    label: string;
-    id: string;
+
+interface IInputProps extends React.ComponentProps<'input'> {
+  label: string;
+  id: string;
 }
 
-function Input({label, id ,...props}: InputProps) {
+function Input({label, id ,...props}: IInputProps) {
   return (
     <div style={{marginBottom: '1rem'}}>
         <label htmlFor={id}>{label}</label>

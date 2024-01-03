@@ -1,21 +1,12 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 
-type ButtonProps2 = React.PropsWithChildren<{
-    tamanho?: string;
-    onClick?: ()=> void;
-}>
+type ButtonProps = {
+  incremetar: React.Dispatch<React.SetStateAction<number>>;
+}
 
-type ButtonProps = React.ComponentProps<'button'> & ButtonProps2;
-
-  
-function Button({tamanho, onClick, children, ...props}: ButtonProps ) {
+function Button({incremetar}: ButtonProps) {
   return (
-    <button 
-        style={{fontSize: tamanho}} 
-        {...props}
-    >
-        {children}
-    </button>
+    <button onClick={() => incremetar((number)=> number + 1)}>Incrementar</button>
   )
 }
 
