@@ -1,16 +1,16 @@
 import React, { useContext } from 'react'
 import { useUI } from './UIContext';
+import { useUser } from './UserContext';
 
 
 
 function Header() {
-
-  const {dark, setDark} = useUI();
-
+    const {data} = useUser();
+    
+    if(!data) return null
   return (
     <header>
-        <h1>{dark ? 'dark':'light'}</h1>
-        <button onClick={()=>setDark(!dark)}>mudar</button>
+        <h1>Nome: {data?.nome}</h1>
     </header>
   )
 }

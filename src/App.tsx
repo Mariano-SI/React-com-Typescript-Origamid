@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import useFetch from "./useFetch";
 import UiContextProvider from "./UIContext";
-import Header from "./HEader";
+import Header from "./Header";
+import Content from "./Content";
+import UserContextProvider from "./UserContext";
 
 
 type Produto = {
@@ -13,16 +15,24 @@ type Produto = {
   internacional: boolean
 }
 
+/*Utilize a API: https://data.origamid.dev/usuarios/1
+
+1 - Crie um UserContext
+2 - Use o useFetch dentro do UserContext para esportar data, loading e error
+3 - Crie dois componentes: Header.tsx e Content.tsx e adicine ambos ao App.tsx
+4 - Mostre o nome da pessoa em Header.tsx e as preferências em Content.tsx
+*/
+
 function App() {
 
-  const [id, setId] = useState('P001')
-  const produtos = useFetch<Produto[]>('https://data.origamid.dev/produtos/');
-  const produto = useFetch<Produto>(`https://data.origamid.dev/produtos/${id}`)
+console.log('aaaa')
+  
 
   return (
-    <UiContextProvider>
-      <Header/>
-    </UiContextProvider>
+    <UserContextProvider>
+        <Header/>
+        <Content/>
+    </UserContextProvider>
   )
 }
 
