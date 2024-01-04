@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import useFetch from "./useFetch";
+import UiContextProvider from "./UIContext";
+import Header from "./HEader";
 
 
 type Produto = {
@@ -18,24 +20,9 @@ function App() {
   const produto = useFetch<Produto>(`https://data.origamid.dev/produtos/${id}`)
 
   return (
-      <div className="flex">
-        <div>
-          {produtos.data && produtos.data.map((prod)=>(
-            <button style={{fontSize:'1rem'}} key={prod.id} onClick={()=> setId(prod.id)}>{prod.id}</button>
-          ))}
-        </div>
-        <div>
-          {produto.data && (
-            <ul>
-              <li>{produto.data.id}</li>
-              <li>{produto.data.nome}</li>
-              <li>{produto.data.preco}</li>
-              <li>{produto.data.descricao}</li>
-              <li>{produto.data.quantidade}</li>
-            </ul>
-          )}
-        </div>
-      </div>
+    <UiContextProvider>
+      <Header/>
+    </UiContextProvider>
   )
 }
 
